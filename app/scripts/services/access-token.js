@@ -126,13 +126,13 @@ accessTokenService.factory('AccessToken', ['Storage', '$rootScope', '$location',
     }
 
     // OpenID Connect
-    if (params.id_token && !params.error) {
+    if (params[service.config.accessTokenQueryParam || 'id_token'] && !params.error) {
       IdToken.validateTokensAndPopulateClaims(params);
       return params;
     }
 
     // Oauth2
-    if(params.access_token || params.error){
+    if(params[service.config.accessTokenQueryParam || 'access_token'] || params.error){
       return params;
     }
   };

@@ -39,7 +39,11 @@ directives.directive('oauth', [
         pubKey: '@',          // (optional for OpenID Connect) the public key(RSA public key or X509 certificate in PEM format) to verify the signature
         wellKnown: '@',       // (optional for OpenID Connect) whether to load public key according to .well-known/openid-configuration endpoint
         logoutPath: '@',    // (optional) A url to go to at logout
-        sessionPath: '@'    // (optional) A url to use to check the validity of the current token.
+        sessionPath: '@',    // (optional) A url to use to check the validity of the current token.
+
+        clientQueryParam: '@', // (optional) the string to use for the clientId in the request to the oauth provider
+        redirectQueryParam: '@', // (optional) the string to use for the redirectUri in the request to the oauth provider
+        accessTokenQueryParam: '@' // (optional) the string to look for in the query params for the access token upon redirection
       }
     };
 

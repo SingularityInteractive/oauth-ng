@@ -490,13 +490,13 @@ accessTokenService.factory('AccessToken', ['Storage', '$rootScope', '$location',
     }
 
     // OpenID Connect
-    if (params.id_token && !params.error) {
+    if (params[service.config.accessTokenQueryParam || 'id_token'] && !params.error) {
       IdToken.validateTokensAndPopulateClaims(params);
       return params;
     }
 
     // Oauth2
-    if(params.access_token || params.error){
+    if(params[service.config.accessTokenQueryParam || 'access_token'] || params.error){
       return params;
     }
   };
@@ -586,8 +586,8 @@ endpointClient.factory('Endpoint', ['$rootScope', 'AccessToken', '$q', '$http', 
     return params.site +
       path +
       appendChar + 'response_type=' + responseType + '&' +
-      'client_id=' + encodeURIComponent(params.clientId) + '&' +
-      'redirect_uri=' + encodeURIComponent(params.redirectUri) + '&' +
+      params.clientQueryParam || 'client_id=' + encodeURIComponent(params.clientId) + '&' +
+      params.redirectQueryParam || 'redirect_uri=' + encodeURIComponent(params.redirectUri) + '&' +
       'scope=' + oAuthScope + '&' +
       'state=' + state + nonceParam;
   };
@@ -762,12 +762,12 @@ var oauthConfigurationService = angular.module('oauth.configuration', []);
 
 oauthConfigurationService.provider('OAuthConfiguration', function() {
 	var _config = {};
-	
+
 	this.init = function(config, httpProvider) {
 		_config.protectedResources = config.protectedResources || [];
 		httpProvider.interceptors.push('AuthInterceptor');
 	};
-	
+
 	this.$get = function() {
 		return {
 			getConfig: function() {
@@ -789,7 +789,7 @@ oauthConfigurationService.provider('OAuthConfiguration', function() {
 					}
 				}
 			});
-			
+
 			return config;
 		}
 	};
@@ -860,7 +860,11 @@ directives.directive('oauth', [
         pubKey: '@',          // (optional for OpenID Connect) the public key(RSA public key or X509 certificate in PEM format) to verify the signature
         wellKnown: '@',       // (optional for OpenID Connect) whether to load public key according to .well-known/openid-configuration endpoint
         logoutPath: '@',    // (optional) A url to go to at logout
-        sessionPath: '@'    // (optional) A url to use to check the validity of the current token.
+        sessionPath: '@',    // (optional) A url to use to check the validity of the current token.
+
+        clientQueryParam: '@', // (optional) the string to use for the clientId in the request to the oauth provider
+        redirectQueryParam: '@', // (optional) the string to use for the redirectUri in the request to the oauth provider
+        accessTokenQueryParam: '@' // (optional) the string to look for in the query params for the access token upon redirection
       }
     };
 
