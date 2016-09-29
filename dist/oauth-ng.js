@@ -586,8 +586,8 @@ endpointClient.factory('Endpoint', ['$rootScope', 'AccessToken', '$q', '$http', 
     return params.site +
       path +
       appendChar + 'response_type=' + responseType + '&' +
-      params.clientQueryParam || 'client_id' + '=' + encodeURIComponent(params.clientId) + '&' +
-      params.redirectQueryParam || 'redirect_uri' + '=' + encodeURIComponent(params.redirectUri) + '&' +
+      (params.clientQueryParam || 'client_id') + '=' + encodeURIComponent(params.clientId) + '&' +
+      (params.redirectQueryParam || 'redirect_uri') + '=' + encodeURIComponent(params.redirectUri) + '&' +
       'scope=' + oAuthScope + '&' +
       'state=' + state + nonceParam;
   };
